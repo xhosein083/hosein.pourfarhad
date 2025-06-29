@@ -536,6 +536,47 @@
       line-height: 1.6rem;
     }
   }
+
+.hamburger {
+  display: none;
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: #00ffd5;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    background-color: rgba(15, 15, 15, 0.95);
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 80%;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+
+  nav ul.active {
+    display: flex;
+  }
+
+  nav ul li {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  nav ul li a {
+    font-size: 1.2rem;
+  }
+}
+
 </style>
 
 <!-- Preloader -->
@@ -549,7 +590,10 @@
 <!-- ناوبری -->
 <nav>
   <div class="logo">حسین پورفرهاد</div>
-  <ul>
+  <div class="hamburger" id="hamburger">
+    <i class="fas fa-bars"></i>
+  </div>
+  <ul id="nav-links">
     <li><a href="#about">درباره من</a></li>
     <li><a href="#skills">مهارت‌ها</a></li>
     <li><a href="#projects">نمونه کارها</a></li>
@@ -561,6 +605,7 @@
     <li><a href="#contact">ارتباط</a></li>
   </ul>
 </nav>
+
 
 <div class="container-box">
 
@@ -982,6 +1027,13 @@ function animateSkillBars() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   });
+
+// همبرگر ناوبری
+document.getElementById('hamburger').addEventListener('click', function() {
+  const navLinks = document.getElementById('nav-links');
+  navLinks.classList.toggle('active');
+});
+
 </script>
 
 {% endblock %}

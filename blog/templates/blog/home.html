@@ -561,12 +561,20 @@
     padding: 20px;
     box-shadow: 0 6px 12px rgba(0,0,0,0.5);
     z-index: 999;
+    align-items: flex-start; /* ← اضافه کن */
   }
 
-
-  nav ul.active {
-    display: flex;
+  nav ul li {
+    margin-bottom: 15px;
+    text-align: left;   /* ← اضافه کن */
+    direction: ltr;     /* ← فقط در صورت نیاز */
   }
+
+  nav ul li a {
+    font-size: 1.2rem;
+  }
+}
+
 
 /* رنگ دکمه‌های منو وقتی فعال هستند (وقتی منو باز است) */
 nav ul.active li a {
@@ -587,7 +595,6 @@ nav ul.active li a::after {
   border-radius: 3px;
 }
 
-}
 </style>
 
 <!-- Preloader -->

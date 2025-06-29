@@ -1,0 +1,382 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block head_extra %}
+<!-- فونت وزیر -->
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" />
+<!-- Bootstrap RTL -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Vazir', sans-serif;
+        direction: rtl;
+        background: linear-gradient(270deg, #74b9ff, #a29bfe, #81ecec);
+        background-size: 600% 600%;
+        animation: gradientBG 10s ease infinite;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .dark-mode {
+        background: #2d3436 !important;
+        color: #e0e0e0;
+    }
+
+    .container {
+        max-width: 950px;
+        margin: 50px auto;
+        background-color: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        animation: fadeIn 1.2s ease-out;
+        transition: filter 0.3s ease;
+    }
+
+    .dark-mode .container {
+        background-color: #3a3a3a;
+        color: #e0e0e0;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        text-align: center;
+        color: #2d3436;
+        font-size: 32px;
+        margin-bottom: 40px;
+        font-weight: 700;
+    }
+
+    .dark-mode h2 {
+        color: #fff;
+    }
+
+    .profile-picture {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid #3498db;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #34495e;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 5px;
+    }
+
+    .dark-mode .section-title {
+        color: #dfe6e9;
+        border-color: #74b9ff;
+    }
+
+    .info-item {
+        margin-bottom: 14px;
+        font-size: 17px;
+        color: #555;
+    }
+
+    .info-item a {
+        color: #3498db;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    .info-item a:hover {
+        color: #2162a9;
+        text-decoration: underline;
+    }
+
+    .dark-mode .info-item {
+        color: #ccc;
+    }
+
+    .btn-download, .btn-back {
+        background-color: #3498db;
+        border: none;
+        padding: 12px 32px;
+        font-size: 18px;
+        border-radius: 8px;
+        color: #fff;
+        transition: all 0.3s ease;
+        font-weight: 700;
+        margin: 0 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+    }
+
+    .btn-back {
+        background-color: #636e72;
+        box-shadow: 0 4px 8px rgba(99, 110, 114, 0.3);
+    }
+
+    .btn-download:hover, .btn-back:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(52, 152, 219, 0.5);
+    }
+
+    .dark-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 999;
+    }
+
+    .dark-toggle button {
+        border: none;
+        background: #2d3436;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        transition: background-color 0.3s ease;
+    }
+
+    .dark-toggle button:hover {
+        background: #1e272e;
+    }
+
+    .hide-on-screenshot {
+        display: none !important;
+    }
+
+    /* ریسپانسیو برای موبایل */
+    @media (max-width: 767px) {
+        .row.align-items-center {
+            flex-direction: column !important;
+            text-align: center;
+        }
+        .row.align-items-center > div {
+            margin-bottom: 20px;
+        }
+        .container {
+            padding: 20px;
+            margin: 30px 10px;
+        }
+        h2 {
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 20px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .btn-download, .btn-back {
+            width: 100%;
+            margin: 8px 0;
+            font-size: 18px;
+        }
+    }
+
+    @media print {
+        body {
+            background: #fff !important;
+            color: #000 !important;
+        }
+        .dark-toggle, .btn-download, .btn-back {
+            display: none !important;
+        }
+        .container {
+            box-shadow: none !important;
+            background: #fff !important;
+            color: #000 !important;
+        }
+        .profile-picture {
+            border-color: #000 !important;
+        }
+    }
+</style>
+
+<!-- دکمه دارک مود -->
+<div class="dark-toggle">
+    <button onclick="toggleDarkMode()">تغییر تم</button>
+</div>
+
+<div class="container" id="resume-container">
+    <h2>رزومه حسین پورفرهاد</h2>
+
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <div class="info-item"><strong>نام:</strong> حسین</div>
+            <div class="info-item"><strong>نام خانوادگی:</strong> پورفرهاد</div>
+            <div class="info-item"><strong>ایمیل‌ها:</strong> 
+                <a href="mailto:hosein.pourfarhad083@gmail.com">hosein.pourfarhad083@gmail.com</a>
+            </div>
+            <div class="info-item"><strong>شماره تماس‌ها:</strong> 
+                <a href="tel:09354572556">09354572556</a>
+            </div>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="{% static 'images/IMG_5365.jpg' %}" alt="Profile Picture" class="profile-picture" />
+        </div>
+    </div>
+
+    <div class="section-title"><i class="bi bi-person-badge-fill"></i> اطلاعات رزومه</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="info-item"><strong>عنوان:</strong> توسعه‌دهنده وب (فرانت‌اند و بک‌اند)</div>
+            <div class="info-item"><strong>خلاصه:</strong> در حال یادگیری و توسعه مهارت‌ها در زمینه برنامه‌نویسی وب؛ آماده همکاری در پروژه‌های چالشی و یادگیری مستمر.</div>
+            <div class="info-item"><strong>جنسیت:</strong> مرد</div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="bi bi-briefcase-fill"></i> تجربه کاری</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="info-item"><strong>عنوان شغلی:</strong> توسعه‌دهنده ارشد</div>
+            <div class="info-item"><strong>توضیحات:</strong> طراحی و پیاده‌سازی پروژه‌های وب، بهینه‌سازی عملکرد و رهبری تیم توسعه.</div>
+            <div class="info-item"><strong>تجربه دیگر:</strong> هنوز تجربه رسمی ندارم ولی اشتیاق و انگیزه بالایی برای یادگیری و پیشرفت دارم.</div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="bi bi-mortarboard-fill"></i> تحصیلات</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="info-item"><strong>مدرک:</strong> کارشناسی</div>
+            <div class="info-item"><strong>رشته:</strong> مهندسی نرم‌افزار</div>
+            <div class="info-item"><strong>دانشگاه:</strong> دانشگاه فنی ملی مهارت شهید مهاجر اصفهان</div>
+            <div class="info-item"><strong>سال فارغ‌التحصیلی:</strong> در حال تحصیل</div>
+            <!-- <div class="info-item mt-3"><strong>در حال تحصیل:</strong> کارشناسی مهندسی نرم‌افزار در دانشگاه فنی ملی مهارت شهید مهاجر اصفهان</div> -->
+        </div>
+    </div>
+
+    <div class="section-title"><i class="bi bi-tools"></i> مهارت‌ها و پروژه‌ها</div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="info-item"><strong>مهارت‌ها:</strong> Python, Django, JavaScript</div>
+            <div class="info-item"><strong>زبان‌ها:</strong> فارسی، انگلیسی</div>
+        </div>
+        <div class="col-md-6">
+            <div class="info-item"><strong>پروژه‌ها:</strong> رزومه ساز انلاین
+              <br><a href="http://rezomesaz.onrender.com" target="_blank" rel="noopener noreferrer">لینک سایت</a></div>
+            <div class="info-item"><strong>گواهینامه‌ها:</strong>آموزش دیده از دانش پژوهان</div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="bi bi-info-circle-fill"></i> درباره من</div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="info-item">
+                فردی با انگیزه، دقیق و علاقه‌مند به یادگیری مداوم. توانایی کار در تیم و دنبال کردن بهترین استانداردهای توسعه نرم‌افزار.
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title"><i class="bi bi-link-45deg"></i> لینک‌ها</div>
+    <div class="row">
+        <div class="col-md-6">
+          
+            <div class="info-item"><strong>گیت‌هاب:</strong> <a href="https://github.com/Hosein-pourfarhad" target="_blank" rel="noopener noreferrer">github.com/hosein</a></div>
+             </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button id="download-pdf" class="btn btn-download">دانلود PDF</button>
+        <button id="download-image" class="btn btn-download">دانلود عکس</button>
+        <a href="{% url 'home' %}" class="btn btn-back">بازگشت</a>
+    </div>
+</div>
+
+<!-- JS کتابخانه‌ها -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+function hideButtons() {
+    document.querySelectorAll('.btn-download, .btn-back').forEach(el => el.classList.add('hide-on-screenshot'));
+}
+
+function showButtons() {
+    document.querySelectorAll('.btn-download, .btn-back').forEach(el => el.classList.remove('hide-on-screenshot'));
+}
+
+document.getElementById('download-pdf').addEventListener('click', function () {
+    hideButtons();
+
+    const element = document.getElementById('resume-container');
+
+    element.style.filter = 'contrast(130%) brightness(115%)';
+
+    const originalBg = document.body.style.background;
+    document.body.style.background = '#ffffff';
+
+    setTimeout(() => {
+        html2canvas(element, {
+            scale: 6,
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = canvas.height * pdfWidth / canvas.width;
+
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('resume.pdf');
+
+            document.body.style.background = originalBg;
+            element.style.filter = '';
+
+            showButtons();
+        });
+    }, 800);
+});
+
+document.getElementById('download-image').addEventListener('click', function () {
+    hideButtons();
+
+    const element = document.getElementById('resume-container');
+
+    element.style.filter = 'contrast(130%) brightness(115%)';
+
+    const originalBg = document.body.style.background;
+    document.body.style.background = '#ffffff';
+
+    setTimeout(() => {
+        html2canvas(element, {
+            scale: 6,
+            useCORS: true,
+            backgroundColor: '#ffffff'
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/jpeg', 1.0);
+            link.download = 'resume.jpg';
+            link.click();
+
+            document.body.style.background = originalBg;
+            element.style.filter = '';
+
+            showButtons();
+        });
+    }, 800);
+});
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+}
+</script>
+
+{% endblock %}

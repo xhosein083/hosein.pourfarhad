@@ -1,0 +1,987 @@
+{% extends 'blog/base.html' %}
+{% block title %}وبلاگ شخصی حسین | توسعه‌دهنده و طراح{% endblock %}
+
+{% block head_extra %}
+<!-- فونت از CDN -->
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+
+<!-- JSON-LD میکرو داده -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "حسین",
+  "jobTitle": "توسعه‌دهنده و طراح",
+  "url": "https://yourwebsite.com",
+  "sameAs": [
+    "https://github.com/yourgithub",
+    "https://t.me/yourtelegram",
+    "https://linkedin.com/in/yourlinkedin",
+    "https://wa.me/yourwhatsappnumber"
+  ],
+  "email": "mailto:youremail@example.com",
+  "image": "https://yourwebsite.com/static/images/profile.jpg",
+  "description": "برنامه‌نویس حرفه‌ای با تخصص در جنگو، طراحی UI/UX و توسعه وب."
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+  /* Preloader */
+  #preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #0f0f0f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15000;
+  }
+  .loader {
+    border: 6px solid #222;
+    border-top: 6px solid #00ffd5;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Vazir', Tahoma, sans-serif;
+    background: #0f0f0f;
+    color: #fff;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  canvas#bg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    background-color: rgba(15, 15, 15, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #00ffd5;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+  }
+
+  nav .logo {
+    font-weight: bold;
+    font-size: 1.8rem;
+    color: #00ffd5;
+    user-select: none;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav ul li a {
+    color: #ddd;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+
+  nav ul li a:hover {
+    color: #00ffd5;
+  }
+
+  .container-box {
+    max-width: 1000px;
+    margin: auto;
+    padding: 80px 20px 60px 20px;
+    position: relative;
+  }
+
+  /* انیمیشن ورود */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation-fill-mode: forwards;
+    animation-name: fadeInUp;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* هرو */
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #00ffd5;
+    margin-bottom: 15px;
+    text-shadow: 0 0 12px #000;
+    text-align: center;
+  }
+
+  .hero p {
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    color: #ddd;
+    text-shadow: 0 0 6px #000;
+    text-align: center;
+  }
+
+  .divider {
+    height: 4px;
+    background: linear-gradient(to left, #00ffd5, #00bfff);
+    width: 100px;
+    margin: 50px auto;
+    border-radius: 2px;
+  }
+
+  .section {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    margin-top: 40px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0;
+  }
+
+  .section.visible {
+    opacity: 1;
+    animation: fadeInUp 1s forwards;
+  }
+
+  .section h2 {
+    color: #00ffd5;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .section p {
+    font-size: 1.1rem;
+    line-height: 2.1rem;
+    color: #e0e0e0;
+  }
+
+  .skills span {
+    display: inline-block;
+    background-color: #222;
+    color: #00ffd5;
+    border: 1px solid #00ffd5;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+  }
+
+ .skill-progress {
+    margin-bottom: 15px;
+  }
+  .skill-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #00ffd5;
+  }
+  .progress-bar {
+    background-color: #222;
+    border-radius: 25px;
+    height: 20px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    background-color: #00ffd5;
+    height: 100%;
+    width: 0;
+    border-radius: 25px;
+    transition: width 1.5s ease-in-out;
+  }
+
+  .blog-posts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 30px;
+  }
+
+  .post-card {
+    background-color: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+  }
+
+  .post-card:hover {
+    transform: translateY(-8px);
+  }
+
+  .post-card h3 {
+    color: #00ffd5;
+    margin-bottom: 12px;
+  }
+
+  .post-card p {
+    color: #ccc;
+    font-size: 1rem;
+    line-height: 1.6rem;
+  }
+
+  .post-card a.read-more {
+    display: inline-block;
+    margin-top: 15px;
+    color: #00ffd5;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .post-card a.read-more:hover {
+    color: #00bfff;
+  }
+
+  .social-icons {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .social-icons a {
+    margin: 0 12px;
+    font-size: 1.8rem;
+    color: #fff;
+    transition: 0.3s;
+  }
+
+  .social-icons a:hover {
+    color: #00ffd5;
+  }
+
+  .cta {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .cta a {
+    padding: 12px 30px;
+    background-color: #00ffd5;
+    color: #000;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .cta a:hover {
+    background-color: #00bfa6;
+    color: #111;
+  }
+
+  /* تجربیات کاری */
+  .experience-item {
+    margin-bottom: 25px;
+  }
+
+  .experience-item h3 {
+    color: #00ffd5;
+    margin-bottom: 8px;
+  }
+
+  .experience-item .duration {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 8px;
+  }
+
+  /* تحصیلات */
+  .education-item {
+    margin-bottom: 25px;
+  }
+
+  .education-item h3 {
+    color: #00ffd5;
+    margin-bottom: 8px;
+  }
+
+  .education-item .duration {
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 8px;
+  }
+
+  /* توصیه‌نامه */
+  .testimonial {
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  }
+
+  .testimonial p {
+    font-style: italic;
+    color: #ddd;
+    margin-bottom: 12px;
+  }
+
+  .testimonial .author {
+    font-weight: 600;
+    color: #00ffd5;
+    text-align: right;
+  }
+
+  /* FAQ */
+  .faq-item {
+    margin-bottom: 15px;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #00ffd5;
+    font-size: 1.1rem;
+    outline: none;
+    padding: 10px 15px;
+    background: rgba(0,255,213,0.1);
+    border-radius: 15px;
+    transition: background 0.3s ease;
+  }
+
+  .faq-item summary:hover {
+    background: rgba(0,255,213,0.2);
+  }
+
+  .faq-item[open] summary {
+    background: rgba(0,255,213,0.3);
+  }
+
+  .faq-item p {
+    padding: 15px 20px;
+    line-height: 1.8rem;
+    color: #ddd;
+    background: rgba(0,0,0,0.2);
+    border-radius: 0 0 15px 15px;
+  }
+
+  /* دانلود رزومه */
+  .download-resume {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .download-resume a {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #00ffd5;
+    color: #000;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+
+  .download-resume a:hover {
+    background-color: #00bfa6;
+    color: #111;
+  }
+
+  /* فیلتر پروژه ها */
+  #project-filter {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  #project-filter button {
+    background: #222;
+    border: 1px solid #00ffd5;
+    color: #00ffd5;
+    padding: 8px 20px;
+    margin: 0 8px 12px 8px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+  }
+
+  #project-filter button.active,
+  #project-filter button:hover {
+    background: #00ffd5;
+    color: #000;
+  }
+
+  /* نمونه کارها */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 25px;
+  }
+
+  .project-card {
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-8px);
+  }
+
+  .project-card h3 {
+    color: #00ffd5;
+    margin-bottom: 12px;
+  }
+
+  .project-card p {
+    color: #ccc;
+    font-size: 1rem;
+    line-height: 1.6rem;
+  }
+
+  .project-card a {
+    color: #00ffd5;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .project-card a:hover {
+    color: #00bfff;
+  }
+
+  /* Scroll to top */
+  #scrollToTopBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #00ffd5;
+    color: #000;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,255,213,0.6);
+    display: none;
+    z-index: 10000;
+    transition: background-color 0.3s ease;
+  }
+
+  #scrollToTopBtn:hover {
+    background-color: #00bfa6;
+  }
+
+  /* ریسپانسیو */
+  @media (max-width: 768px) {
+    nav {
+      padding: 15px 20px;
+    }
+    nav ul {
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .container-box {
+      padding: 60px 15px 40px 15px;
+      max-width: 90vw;
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      line-height: 2rem;
+    }
+    .section {
+      padding: 25px 20px;
+    }
+    .blog-posts,
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 400px) {
+    nav ul {
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+    .hero h1 {
+      font-size: 1.8rem;
+    }
+    .hero p {
+      font-size: 1rem;
+      line-height: 1.6rem;
+    }
+  }
+</style>
+
+<!-- Preloader -->
+<div id="preloader">
+  <div class="loader"></div>
+</div>
+
+<!-- بکگراند پارتیکل -->
+<canvas id="bg"></canvas>
+
+<!-- ناوبری -->
+<nav>
+  <div class="logo">حسین پورفرهاد</div>
+  <ul>
+    <li><a href="#about">درباره من</a></li>
+    <li><a href="#skills">مهارت‌ها</a></li>
+    <li><a href="#projects">نمونه کارها</a></li>
+    <li><a href="#experience">تجربیات</a></li>
+    <li><a href="#education">تحصیلات</a></li>
+    <li><a href="#testimonials">توصیه‌نامه</a></li>
+    <li><a href="#faq">سوالات متداول</a></li>
+    <li><a href="#resume">رزومه</a></li>
+    <li><a href="#contact">ارتباط</a></li>
+  </ul>
+</nav>
+
+<div class="container-box">
+
+  <section class="hero fade-in" id="hero">
+    <h1>سلام! من حسینم 👨‍💻</h1>
+  <p>
+    سلام! من حسین پورفرهاد، برنامه‌نویس فرانت‌اند و بک‌اند هستم.  
+    با تجربه در توسعه وب و علاقه‌مند به یادگیری تکنولوژی‌های جدید.  
+    همیشه مشتاق همکاری در پروژه‌های چالش‌برانگیز و یادگیری تیمی هستم.  
+    اگر به دنبال همکاری حرفه‌ای و با انگیزه می‌گردی، خوشحال می‌شوم در تماس باشیم.
+  </p>
+
+
+
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section fade-in" id="about">
+    <h2>درباره من</h2>
+  <p>
+    سلام! من حسین پورفرهاد هستم، متولد ۱ شهریور ۱۳۸۳ و ساکن شاهین‌شهر.  
+    برنامه‌نویس فرانت‌اند و بک‌اند با تمرکز ویژه روی توسعه وب و طراحی رابط کاربری.  
+    از همان ابتدا که با دنیای برنامه‌نویسی آشنا شدم، این مسیر را نه صرفاً یک شغل، بلکه یک سبک زندگی دیدم.  
+    برای من برنامه‌نویسی یعنی خلاقیت، دقت، و حل مسئله؛ مهارت‌هایی که همواره سعی کرده‌ام آن‌ها را بهبود دهم و در پروژه‌های مختلف پیاده کنم.  
+    تخصص من در استفاده از Django به عنوان فریم‌ورک بک‌اند و زبان Python است، همچنین با تکنولوژی‌های فرانت‌اند مثل HTML، CSS، JavaScript و فریم‌ورک‌های مربوطه آشنایی خوبی دارم.  
+    علاوه بر توسعه وب، به طراحی UI/UX با Figma علاقه‌مندم و سعی می‌کنم تجربه کاربری را در پروژه‌ها به بهترین شکل ارتقا دهم.  
+    تحصیلاتم شامل مدرک کاردانی نرم‌افزار و در حال حاضر در ترم سوم کارشناسی مهندسی نرم‌افزار هستم و برنامه دارم به زودی فارغ‌التحصیل شوم.  
+    همچنین تجربه کار با ویندوز سرور و پایگاه داده SQL را دارم که توانایی‌ام را در مدیریت سرورها و داده‌ها افزایش داده است.  
+    من همواره به یادگیری مداوم و بروزرسانی دانش خود متعهد هستم و آماده‌ام در پروژه‌های چالش‌برانگیز و تیمی فعالیت کنم.  
+    اگر به دنبال یک همکار حرفه‌ای، دقیق و خلاق هستید، خوشحال می‌شوم فرصت همکاری داشته باشیم و پروژه‌های موفقی را با هم بسازیم.  
+    این وبلاگ محلی است برای به اشتراک گذاشتن تجربیات، پروژه‌ها و یادگیری‌های من، و امیدوارم بتواند برای شما هم الهام‌بخش و مفید باشد.
+  </p>
+
+  </section>
+
+  <section class="section fade-in" id="skills">
+    <h2>مهارت‌ها</h2>
+    <div class="skills">
+      <span>HTML</span>
+      <span>CSS</span>
+      <span>Django</span>
+      <span>Bootstrap</span>
+      <span>SQL</span>
+      <span>Windows Server</span>
+      <span>Figma</span>
+      <span>UI/UX</span>
+      <span>C#</span>
+      <span>JavaScript</span>
+      <span>Python</span>
+      <span>Git</span>
+      <span>Responsive Design</span>
+    </div>
+
+
+    <!-- نوار مهارت ها -->
+    <div class="skill-progress">
+    <div class="skill-label">Python</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="100%"></div></div>
+  </div>
+
+  <div class="skill-progress">
+    <div class="skill-label">HTML & CSS</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="100%"></div></div>
+  </div>
+
+  <div class="skill-progress">
+    <div class="skill-label">Bootstrap</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="90%"></div></div>
+  </div>
+
+  <div class="skill-progress">
+    <div class="skill-label">Django</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="90%"></div></div>
+  </div>
+
+  <div class="skill-progress">
+    <div class="skill-label">SQL</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="65%"></div></div>
+  </div>
+
+  <div class="skill-progress">
+    <div class="skill-label">Figma</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="60%"></div></div>
+  </div>
+
+  <div class="skill-progress">
+    <div class="skill-label">JavaScript</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="40%"></div></div>
+  </div>
+
+  <div class="skill-progress">
+    <div class="skill-label">C#</div>
+    <div class="progress-bar"><div class="progress-bar-fill" data-progress="30%"></div></div>
+  </div>
+  </section>
+
+  <section class="section fade-in" id="projects">
+    <h2>نمونه کارها</h2>
+
+    <div id="project-filter">
+      <button class="active" data-filter="all">همه</button>
+      <button data-filter="django">Django</button>
+      <button data-filter="frontend">فرانت‌اند</button>
+      <button data-filter="uiux">UI/UX</button>
+    </div>
+
+    <div class="projects-grid">
+      <div class="project-card" data-category="django">
+        <h3>سامانه مدیریت محتوا</h3>
+        <p>سامانه‌ای برای مدیریت محتوا با جنگو، ریسپانسیو و بهینه شده.</p>
+        <a href="#" target="_blank">مشاهده پروژه</a>
+      </div>
+      <div class="project-card" data-category="frontend">
+        <h3>وب‌سایت رزومه ساز آنلاین</h3>
+          <p>طراحی و توسعه وب‌سایت با HTML، CSS و JavaScript. </p> 
+        <a href="https://rezomesaz.onrender.com/" target="_blank">مشاهده پروژه</a>
+      </div>
+      <div class="project-card" data-category="uiux">
+        <h3>طراحی رابط کاربری اپلیکیشن موبایل</h3>
+        <p>طراحی کامل UI/UX با Figma و اصول تجربه کاربری.</p>
+        <a href="https://www.figma.com/design/rlrK7sdzrCWGzC8sqGxzdP/CRM-Mobile-App?node-id=0-1&p=f&t=uQq5hg2lfA6baXvU-0" target="_blank">مشاهده پروژه</a>
+      </div>
+      <div class="project-card" data-category="django">
+        <h3>اپلیکیشن مدیریت وظایف</h3>
+        <p>برنامه تحت وب با جنگو برای مدیریت پروژه‌ها و وظایف تیمی.</p>
+        <a href="#" target="_blank">مشاهده پروژه</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section fade-in" id="experience">
+    <h2>تجربیات کاری</h2>
+    <div class="experience-item">
+      <h3>توسعه‌دهنده وب - شرکت فناوری ایرانی</h3>
+      <div class="duration">فروردین ۱۴۰۱ - اکنون</div>
+      <p>توسعه و نگهداری وب‌سایت‌های سازمانی، پیاده‌سازی پروژه‌های Django و طراحی UI/UX.</p>
+    </div>
+    <div class="experience-item">
+      <h3>برنامه‌نویس پاره‌وقت - استارتاپ فناوری</h3>
+      <div class="duration">مهر ۱۴۰۰ - اسفند ۱۴۰۰</div>
+      <p>توسعه اپلیکیشن مدیریت وظایف و بهبود رابط کاربری.</p>
+    </div>
+  </section>
+
+  <section class="section fade-in" id="education">
+    <h2>تحصیلات</h2>
+    <div class="education-item">
+      <h3>کارشناسی مهندسی نرم‌افزار</h3>
+      <div class="duration">۱۴۰۳ - در حال تحصیل</div>
+      <p>دانشگاه فنی ملی مهرت شهید مهاجر اصفهان</p>
+    </div>
+    <div class="education-item">
+      <h3>فوق دیپلم مهندسی نرم افزار</h3>
+      <div class="duration">۱۴۰۱ - ۱۴۰۳</div>
+      <p>دانشکده فنی ملی مهارت پسران گلپایگان</p>
+    </div>
+    <div class="education-item">
+      <h3>دیپلم شبکه و نرم افزار</h3>
+      <div class="duration">۱۳۹۸ - ۱۴۰۱</div>
+      <p>دبیرستان دولتی دارالفنون</p>
+    </div>
+  </section>
+
+  <section class="section fade-in" id="testimonials">
+    <h2>توصیه‌نامه</h2>
+    <div class="testimonial">
+     <div class="info-item">
+    💬 "من یک توسعه‌دهنده دقیق و علاقه‌مند به یادگیری مداومم. تمرکز من روی کیفیت، سرعت و پیاده‌سازی خلاقانه پروژه‌هاست. هدفم ساخت ابزارهایی واقعاً مفید و کاربردی برای کاربران است."
+    </div>
+      <div class="author">- حسین پورفرهاد</div>
+    </div>
+    <div class="testimonial">
+      <p>"عاشق یادگیری‌ام، و هر پروژه برام یه فرصت جدیده برای بهتر شدن و خلق ارزش واقعی."</p>
+      <div class="author">- حسین پورفرهاد</div>
+    </div>
+  </section>
+
+  <section class="section fade-in" id="faq">
+    <h2>سوالات متداول</h2>
+    <details class="faq-item">
+      <summary>چه زبان‌هایی را بهتر می‌دانید؟</summary>
+      <p>من به زبان‌های Python، JavaScript و SQL مسلط هستم و در زمینه توسعه وب با Django تخصص دارم.</p>
+    </details>
+    <details class="faq-item">
+      <summary>چگونه می‌توانم با شما همکاری کنم؟</summary>
+      <p>می‌توانید از طریق ایمیل یا شبکه‌های اجتماعی با من تماس بگیرید یا روی دکمه دعوت به همکاری کلیک کنید.</p>
+    </details>
+    <details class="faq-item">
+      <summary>رزومه شما را چگونه دریافت کنم؟</summary>
+      <p>در بخش رزومه، دکمه دانلود رزومه موجود است که می‌توانید آن را به صورت PDF یا DOCX دانلود کنید.</p>
+    </details>
+  </section>
+
+  <section class="section fade-in" id="resume">
+    <h2>رزومه من</h2>
+    <div class="download-resume">
+        <a href="{% url 'resume_page' %}">رزومه من</a>
+    </div>
+  </section>
+
+
+
+  <section class="section fade-in" id="contact">
+    <h2>ارتباط با من</h2>
+    <div class="social-icons" role="navigation" aria-label="شبکه‌های اجتماعی حسین">
+      <a href="https://github.com/Hosein-pourfarhad" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      <a href="mailto:hosein.pourfarhad083@gmail.com" target="_blank" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      <a href="https://t.me/hosein_p83" target="_blank" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+      <a href="https://linkedin.com/in/-" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+      <a href="https://wa.me/+989354572556" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      <a href="tel:+989354572556" aria-label="Phone"><i class="fas fa-phone"></i></a>
+    </div>
+    <p style="text-align:center; margin-top: 20px; color: #00ffd5; font-weight: 600;">
+      پاسخگویی از ساعت ۹ صبح تا ۷ عصر
+    </p>
+    <div class="cta mt-4" style="text-align:center;">
+      <a href="mailto:hosein.pourfarhad083@gmail.com">دعوت به همکاری</a>
+    </div>
+  </section>
+
+</div>
+
+<button id="scrollToTopBtn" aria-label="بازگشت به بالا"><i class="fas fa-arrow-up"></i></button>
+
+<!-- آیکون‌ها -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<script>
+  // Preloader حذف پس از لود کامل صفحه
+  window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    preloader.style.opacity = '0';
+    setTimeout(() => preloader.style.display = 'none', 500);
+  });
+
+  // انیمیشن ورود بخش ها هنگام اسکرول
+  function revealSections() {
+    const sections = document.querySelectorAll('.fade-in');
+    const triggerBottom = window.innerHeight * 0.85;
+
+    sections.forEach(section => {
+      const sectionTop = section.getBoundingClientRect().top;
+      if (sectionTop < triggerBottom) {
+        section.classList.add('visible');
+      }
+    });
+  }
+  window.addEventListener('scroll', revealSections);
+  revealSections();
+
+  // مهارت ها نوار پیشرفت انیمیشن
+   window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  preloader.style.opacity = '0';
+  setTimeout(() => preloader.style.display = 'none', 500);
+
+  revealSections();
+  animateSkillBars();
+});
+
+function revealSections() {
+  const sections = document.querySelectorAll('.fade-in');
+  const triggerBottom = window.innerHeight * 0.85;
+
+  sections.forEach(section => {
+    const sectionTop = section.getBoundingClientRect().top;
+    if (sectionTop < triggerBottom) {
+      section.classList.add('visible');
+    }
+  });
+}
+
+window.addEventListener('scroll', () => {
+  revealSections();
+  animateSkillBars();
+});
+
+function animateSkillBars() {
+  const progressBars = document.querySelectorAll('.progress-bar-fill');
+  const triggerBottom = window.innerHeight * 0.85;
+
+  progressBars.forEach(bar => {
+    const barTop = bar.getBoundingClientRect().top;
+    if (barTop < triggerBottom && !bar.classList.contains('filled')) {
+      const progress = bar.getAttribute('data-progress');
+      bar.style.width = progress;
+      bar.classList.add('filled');
+    }
+  });
+}
+
+  // فیلتر نمونه کارها
+  const filterButtons = document.querySelectorAll('#project-filter button');
+  const projectCards = document.querySelectorAll('.project-card');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter');
+
+      // دکمه فعال
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      // فیلتر پروژه‌ها
+      projectCards.forEach(card => {
+        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+          card.style.display = 'block';
+          setTimeout(() => card.classList.add('visible'), 100);
+        } else {
+          card.style.display = 'none';
+          card.classList.remove('visible');
+        }
+      });
+    });
+  });
+
+  // Scroll to top
+  const scrollBtn = document.getElementById('scrollToTopBtn');
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      scrollBtn.style.display = 'block';
+    } else {
+      scrollBtn.style.display = 'none';
+    }
+  });
+  scrollBtn.addEventListener('click', () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+
+  // Canvas particle animation (با جذب به سمت ماوس)
+  const canvas = document.getElementById("bg");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let particles = [];
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.radius = 1 + Math.random() * 2;
+    }
+
+    move() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = "#00ffd5";
+      ctx.fill();
+    }
+  }
+
+  let mouse = { x: null, y: null };
+  window.addEventListener('mousemove', (event) => {
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
+  });
+
+  for (let i = 0; i < 100; i++) {
+    particles.push(new Particle());
+  }
+
+  function connectParticles() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        let dx = particles[i].x - particles[j].x;
+        let dy = particles[i].y - particles[j].y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = "rgba(0,255,213," + (1 - dist / 100) + ")";
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function attractToMouse(particle) {
+    if (mouse.x === null || mouse.y === null) return;
+    let dx = mouse.x - particle.x;
+    let dy = mouse.y - particle.y;
+    let dist = Math.sqrt(dx*dx + dy*dy);
+
+    if (dist < 150) {
+      particle.vx += dx * 0.001;
+      particle.vy += dy * 0.001;
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particles) {
+      attractToMouse(p);
+      p.move();
+      p.draw();
+    }
+    connectParticles();
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
+{% endblock %}

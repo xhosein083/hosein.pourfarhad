@@ -536,50 +536,6 @@
       line-height: 1.6rem;
     }
   }
-#menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  color: #00ffd5;
-  cursor: pointer;
-}
-
-#mobile-menu {
-  display: flex;
-}
-
-@media (max-width: 768px) {
-  #menu-toggle {
-    display: block;
-  }
-
-  #mobile-menu {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    background: rgba(0,0,0,0.9);
-    padding: 15px;
-    position: absolute;
-    top: 70px;
-    right: 0;
-    z-index: 9999;
-  }
-
-  #mobile-menu ul {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  #mobile-menu.show {
-    display: flex;
-  }
-
-  nav ul {
-    display: none;
-  }
-}
-
 </style>
 
 <!-- Preloader -->
@@ -589,10 +545,10 @@
 
 <!-- بکگراند پارتیکل -->
 <canvas id="bg"></canvas>
- <button id="menu-toggle" aria-label="باز کردن منو">
-    <i class="fas fa-bars"></i>
-  </button>
 
+<!-- ناوبری -->
+<nav>
+  <div class="logo">حسین پورفرهاد</div>
   <ul>
     <li><a href="#about">درباره من</a></li>
     <li><a href="#skills">مهارت‌ها</a></li>
@@ -605,21 +561,6 @@
     <li><a href="#contact">ارتباط</a></li>
   </ul>
 </nav>
-
-<!-- منوی موبایل -->
-<div id="mobile-menu">
-  <ul>
-    <li><a href="#about">درباره من</a></li>
-    <li><a href="#skills">مهارت‌ها</a></li>
-    <li><a href="#projects">نمونه کارها</a></li>
-    <li><a href="#experience">تجربیات</a></li>
-    <li><a href="#education">تحصیلات</a></li>
-    <li><a href="#testimonials">توصیه‌نامه</a></li>
-    <li><a href="#faq">سوالات متداول</a></li>
-    <li><a href="#resume">رزومه</a></li>
-    <li><a href="#contact">ارتباط</a></li>
-  </ul>
-</div>
 
 <div class="container-box">
 
@@ -1041,14 +982,6 @@ function animateSkillBars() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   });
-  
-const toggleBtn = document.getElementById('menu-toggle');
-const mobileMenu = document.getElementById('mobile-menu');
-
-toggleBtn.addEventListener('click', () => {
-  mobileMenu.classList.toggle('show');
-});
-
 </script>
 
 {% endblock %}
